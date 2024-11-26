@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Underground Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #1a1a1a, #0d0d0d);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #ff5733;
+            margin: 20px 0;
+            font-size: 3rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 87, 51, 0.8);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .nav button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: #ff5733;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav button:hover {
+            background: #e94e2e;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .table-container {
+            position: relative;
+            width: 1600px;
+            height: 900px;
+            background: radial-gradient(circle at center, #006400 60%, #004b23);
+            border-radius: 50% / 35%;
+            border: 15px solid #8b4513;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+            margin: 20px auto;
+        }
+
+        .cash-counter {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: #202020;
+            border: 5px solid #ff5733;
+            border-radius: 15px;
+            padding: 20px 40px;
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 87, 51, 0.8);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .cash-counter span {
+            color: #28a745;
+        }
+
+        .seat {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background: #303030;
+            color: #ffffff;
+            border: 2px solid #ff5733;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.9rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+            cursor: grab;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .seat:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 87, 51, 0.8);
+        }
+
+        .seat img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .seat .player-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .seat .player-stats input {
+            width: 100px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .seat .player-stats button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .seat .player-stats .buy-in-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .seat .player-stats .cash-out-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .legend {
+            margin-top: 20px;
+            background: #202020;
+            border: 2px solid #ff5733;
+            border-radius: 10px;
+            padding: 10px;
+            width: 90%;
+        }
+
+        .legend-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ff5733;
+        }
+
+        .winner {
+            color: #28a745;
+        }
+
+        .loser {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>The Underground Game</h1>
+
+    <div class="nav">
+        <button onclick="showPage('tableView')">Table View</button>
+        <button onclick="showPage('winnerLoserPage')">Winners & Losers</button>
+    </div>
+
+    <div class="container" id="tableView">
+        <div class="add-player">
+            <input type="text" id="playerName" placeholder="Player Name">
+            <select id="playerIcon">
+                <option value="🃏">Card</option>
+                <option value="🎲">Dice</option>
+                <option value="💰">Cash</option>
+                <option value="♠️">Spade</option>
+                <option value="♦️">Diamond</option>
+                <option value="♣️">Club</option>
+                <option value="♥️">Heart</option>
+                <option value="🎴">Poker Hand</option>
+                <option value="👑">King</option>
+                <option value="👸">Queen</option>
+                <option value="🐟">Fish</option>
+            </select>
+            <button onclick="addPlayer()">Add Player</button>
+        </div>
+        <div class="table-container" id="pokerTable">
+            <div class="cash-counter">
+                MONEY IN THE UNDERGROUND GAME<br>
+                $<span id="totalMoney">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="winnerLoserPage">
+        <div class="legend">
+            <div class="legend-title">Winners</div>
+            <div id="winnersList"></div>
+        </div>
+        <div class="legend">
+            <div class="legend-title">Losers</div>
+            <div id="losersList"></div>
+        </div>
+    </div>
+
+    <script>
+        const players = [];
+        const maxSeats = 10;
+        let totalMoney = 0;
+
+        const seatPositions = Array.from({ length: maxSeats }, (_, i) => ({
+            x: 800 + 500 * Math.cos((2 * Math.PI * i) / maxSeats),
+            y: 450 + 300 * Math.sin((2 * Math.PI * i) / maxSeats),
+        }));
+
+        function showPage(pageId) {
+            document.querySelectorAll('.container').forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function addPlayer() {
+            if (players.length >= maxSeats) {
+                alert('The table is full! Wait for someone to cash out.');
+                return;
+            }
+
+            const playerName = document.getElementById('playerName').value.trim();
+            const playerIcon = document.getElementById('playerIcon').value;
+            if (!playerName) {
+                alert('Please enter a player name.');
+                return;
+            }
+
+            players.push({
+                name: playerName,
+                icon: playerIcon,
+                buyIns: 0,
+                x: seatPositions[players.length].x,
+                y: seatPositions[players.length].y,
+            });
+
+            document.getElementById('playerName').value = '';
+            updateTable();
+        }
+
+        function updateTable() {
+            const pokerTable = document.getElementById('pokerTable');
+            pokerTable.innerHTML = `
+                <div class="cash-counter">
+                    MONEY IN THE UNDERGROUND GAME<br>
+                    $<span id="totalMoney">${totalMoney.toFixed(2)}</span>
+                </div>
+            `;
+
+            players.forEach((player, index) => {
+                const seat = document.createElement('div');
+                seat.className = 'seat';
+                seat.style.left = `${player.x}px`;
+                seat.style.top = `${player.y}px`;
+                seat.draggable = true;
+                seat.innerHTML = `
+                    <div>${player.icon}</div>
+                    <div class="player-name">${player.name}</div>
+                    <div class="player-stats">
+                        Total Buy-In: $${player.buyIns.toFixed(2)}<br>
+                        <input type="number" id="buyIn${index}" placeholder="Buy-In">
+                        <button class="buy-in-btn" onclick="addBuyIn(${index}, document.getElementById('buyIn${index}').value)">Add Buy-In</button>
+                        <input type="number" id="cashOut${index}" placeholder="Cash-Out">
+                        <button class="cash-out-btn" onclick="cashOut(${index}, document.getElementById('cashOut${index}').value)">Cash Out</button>
+                    </div>
+                `;
+                seat.addEventListener('dragend', (event) => {
+                    const rect = pokerTable.getBoundingClientRect();
+                    players[index].x = event.clientX - rect.left - seat.offsetWidth / 2;
+                    players[index].y = event.clientY - rect.top - seat.offsetHeight / 2;
+                    updateTable();
+                });
+                pokerTable.appendChild(seat);
+            });
+        }
+
+        function addBuyIn(index, amount) {
+            amount = parseFloat(amount);
+            if (isNaN(amount) || amount <= 0) return;
+            players[index].buyIns += amount;
+            totalMoney += amount;
+            updateTable();
+        }
+
+        function cashOut(index, amount) {
+            amount = parseFloat(amount);
+            if (isNaN(amount)) amount = 0;
+
+            const player = players[index];
+            const profit = amount - player.buyIns;
+            const list = profit >= 0 ? document.getElementById('winnersList') : document.getElementById('losersList');
+
+            let existingEntry = Array.from(list.children).find(child => child.dataset.name === player.name);
+            if (existingEntry) {
+                existingEntry.innerHTML = `${player.name} (${profit >= 0 ? '+' : ''}${profit.toFixed(2)})`;
+            } else {
+                const entry = document.createElement('div');
+                entry.dataset.name = player.name;
+                entry.className = profit >= 0 ? 'winner' : 'loser';
+                entry.innerHTML = `${player.name} (${profit >= 0 ? '+' : ''}${profit.toFixed(2)})`;
+                list.appendChild(entry);
+            }
+
+            totalMoney -= amount;
+            players.splice(index, 1);
+            updateTable();
+        }
+    </script>
+</body>
+</html>
