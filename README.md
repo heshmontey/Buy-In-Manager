@@ -38,7 +38,12 @@ Technologies Used:
 
 ---
 
-How to Run Locally:
+How to Run:
+
+Github Paged
+1. Go to https://github.com/heshmontey/Buy-In-Manager/tree/main
+
+Run Locally
 
 1. Clone the Repository: 
    You can clone the repository to your local machine using Git:
