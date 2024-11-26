@@ -40,9 +40,10 @@ Technologies Used:
 
 How to Run:
 
-Github Paged
-1. Go to https://github.com/heshmontey/Buy-In-Manager/tree/main
+Github Pages
 
+1. Go to https://heshmontey.github.io/Buy-In-Manager/
+   
 Run Locally
 
 1. Clone the Repository: 
